@@ -10,15 +10,25 @@ function game() {
         2: "#e2543e"
     }
 
-    var EASY_MAP = [
-        [1, 1, 1, 1, 2, 1, 1, 1, 1],
-        [1, 0, 0, 0, 0, 1, 0, 0, 1],
-        [1, 0, 1, 1, 1, 1, 0, 1, 1],
-        [1, 0, 1, 0, 0, 0, 0, 0, 1],
-        [1, 0, 1, 1, 1, 1, 1, 0, 1],
-        [1, 0, 0, 0, 0, 0, 0, 0, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1]
-    ];
+    var EASY_MAP = {
+        'map': [
+            [1, 1, 1, 1, 2, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 1, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1, 1],
+            [1, 0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ],
+        'left_position_x': 50,
+        'left_position_y': 40,
+        'right_position_x': 310,
+        'right_position_y': 40,
+        'top_position_x': 110,
+        'top_position_y': 5,
+        'bottom_position_x': 110,
+        'bottom_position_y': 215
+    }
 
     var SQR_SIZE = 20;
     var container = document.getElementById("game");
@@ -33,14 +43,36 @@ function game() {
         width: 700,
         container: document.getElementById("game"),
         create: function() {
-            this.map = EASY_MAP;
+            this.map = EASY_MAP.map;
             this.player = {
                 x: 5,
                 y: 5,
                 color: "#e2543e"
             };
+            this.top_opacity = 1;
+            this.left_opacity = 1;
+            this.bottom_opacity = 1;
+            this.right_opacity = 1;
 
             this.loadImage("bar");
+            this.loadImage("bar_horizontal");
+        },
+        display_walls: function() {
+            y = this.player.y;
+            x = this.player.x;
+
+            if (this.map[y][x-1] != 0) {
+                this.left_opacity = 0;
+            }
+            if (this.map[y][x+1] != 0) {
+                this.right_opacity = 0;
+            }
+            if (this.map[y-1][x] != 0) {
+                this.top_opacity = 0;
+            }
+            if (this.map[y+1][x] != 0) {
+                this.bottom_opacity = 0;
+            }
         },
         is_empty_location: function(to_x, to_y) {
             if (to_y >= this.map.length) {
@@ -74,9 +106,37 @@ function game() {
                 }
             }
 
-            this.layer.drawImage(this.images.bar, MAP_HOR_OFFSET - 50, MAP_VERT_OFFSET- 10);
-            this.layer.drawImage(this.images.bar, this.map.length * SQR_SIZE + MAP_HOR_OFFSET, 0);
+            //this.layer.drawImage(this.images.bar, EASY_MAP.left_position_x, EASY_MAP.left_position_y);
+            //this.layer.drawImage(this.images.bar, EASY_MAP.right_position_x, EASY_MAP.right_position_y);
+            //this.layer.drawImage(this.images.bar_horizontal, EASY_MAP.top_position_x, EASY_MAP.top_position_y);
             
+            //var blendedBot = cq(this.images.bar_horizontal).blend("#637074", "normal", 0.2);
+            //this.layer.drawImage(blendedBot.canvas, EASY_MAP.bottom_position_x, EASY_MAP.bottom_position_y);
+           
+            // opacity for buttons
+            if (this.top_opacity < 1) {
+               this.top_opacity += .02;
+               var blendedTop = cq(this.images.bar_horizontal).blend("#637074", "normal", this.top_opacity);
+               this.layer.drawImage(blendedTop.canvas, EASY_MAP.top_position_x, EASY_MAP.top_position_y);
+            }
+
+            if (this.bottom_opacity < 1) {
+               this.bottom_opacity += .02;
+               var blendedBot = cq(this.images.bar_horizontal).blend("#637074", "normal", this.bottom_opacity);
+               this.layer.drawImage(blendedBot.canvas, EASY_MAP.bottom_position_x, EASY_MAP.bottom_position_y);
+            }
+            
+            if (this.left_opacity < 1) {
+               this.left_opacity += .02;
+               var blendedLeft = cq(this.images.bar).blend("#637074", "normal", this.left_opacity);
+               this.layer.drawImage(blendedLeft.canvas, EASY_MAP.left_position_x, EASY_MAP.left_position_y);
+            }
+
+            if (this.right_opacity < 1) {
+               this.right_opacity += .02;
+               var blendedRight = cq(this.images.bar).blend("#637074", "normal", this.right_opacity);
+               this.layer.drawImage(blendedRight.canvas, EASY_MAP.right_position_x, EASY_MAP.right_position_y);
+            }
             // display user
             this.layer.fillStyle(this.player.color).fillRect(this.player.x*SQR_SIZE + MAP_HOR_OFFSET, this.player.y*SQR_SIZE + MAP_VERT_OFFSET, SQR_SIZE, SQR_SIZE);
         },
@@ -104,6 +164,7 @@ function game() {
                 this.player.x = newX;
                 this.player.y = newY;
             }
+            this.display_walls();
         }
     });
 }
