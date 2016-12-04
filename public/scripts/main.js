@@ -5,8 +5,8 @@ window.onload = function() {
 
 function game() {
     var colorMap = {
-        0: "#ffffff",
-        1: "#212227",
+        0: "#D3D3D3",
+        1: "#2F2F2F",
         2: "#e2543e"
     }
 
@@ -37,8 +37,10 @@ function game() {
 
     var app = new PLAYGROUND.Application({
         paths: {
-            images: "static/images/"
+            images: "static/images/",
+            sounds: "static/sounds/"
         },
+        preferedAudioFormat: "mp3",
         height: 500,
         width: 700,
         container: document.getElementById("game"),
@@ -53,9 +55,18 @@ function game() {
             this.left_opacity = 1;
             this.bottom_opacity = 1;
             this.right_opacity = 1;
-
+            
+            // load images
             this.loadImage("bar");
             this.loadImage("bar_horizontal");
+
+            // load sounds
+            this.loadSounds("pulse", "bg");
+        },
+        ready: function() {
+            console.log("ready");
+            this.bg_sound = this.music.play("bg", true);
+            this.music.setVolume(this.bg_sound, 0.2);
         },
         display_walls: function() {
             y = this.player.y;
@@ -164,6 +175,8 @@ function game() {
                 this.player.x = newX;
                 this.player.y = newY;
             }
+            var test = this.sound.play("pulse", false);
+//            this.sound.setVolume(test, 2);
             this.display_walls();
         }
     });
