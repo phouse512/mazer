@@ -1,6 +1,35 @@
+var explosions;
+var emitter;
+
 window.onload = function() {
     document.getElementById("game").style.background = "#637074";
     game();
+
+    setTimeout(function() {
+        canvas = $("canvas")[0];
+        console.log(canvas);
+
+        var proton = new Proton()
+        emitter = new Proton.Emitter();
+        emitter.rate = new Proton.Rate(Proton.getSpan(10, 20), 0.1);
+        //add Initialize
+        emitter.addInitialize(new Proton.Radius(1, 12));
+        emitter.addInitialize(new Proton.Life(2, 4));
+        emitter.addInitialize(new Proton.Velocity(3, Proton.getSpan(0, 360), 'polar'));
+        //add Behaviour
+        emitter.addBehaviour(new Proton.Color('ff0000', 'random'));
+        emitter.addBehaviour(new Proton.Alpha(1, 0));
+        //set emitter position
+        emitter.p.x = canvas.width / 2;
+        emitter.p.y = canvas.height / 2;
+        emitter.emit();
+        //add emitter to the proton
+        proton.addEmitter(emitter);
+        // add canvas renderer
+        var renderer = new Proton.Renderer('canvas', proton, canvas);
+        renderer.start();
+        explosions = proton;
+    }, 3000);
 }
 
 function game() {
@@ -20,6 +49,8 @@ function game() {
             [1, 0, 0, 0, 0, 0, 0, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1, 1]
         ],
+        'target_x': 4,
+        'target_y': 0,
         'left_position_x': 50,
         'left_position_y': 40,
         'right_position_x': 310,
@@ -46,6 +77,9 @@ function game() {
         container: document.getElementById("game"),
         create: function() {
             this.map = EASY_MAP.map;
+            this.goalX = EASY_MAP.target_x;
+            this.goalY =  EASY_MAP.target_y;
+            this.maxDistance = 5.9;
             this.player = {
                 x: 5,
                 y: 5,
@@ -149,7 +183,14 @@ function game() {
                this.layer.drawImage(blendedRight.canvas, EASY_MAP.right_position_x, EASY_MAP.right_position_y);
             }
             // display user
-            this.layer.fillStyle(this.player.color).fillRect(this.player.x*SQR_SIZE + MAP_HOR_OFFSET, this.player.y*SQR_SIZE + MAP_VERT_OFFSET, SQR_SIZE, SQR_SIZE);
+            //this.layer.fillStyle(this.player.color).fillRect(this.player.x*SQR_SIZE + MAP_HOR_OFFSET, this.player.y*SQR_SIZE + MAP_VERT_OFFSET, SQR_SIZE, SQR_SIZE);
+            //
+            if (explosions) {
+                explosions.update();
+                emitter.p.x = this.player.x*SQR_SIZE;
+                emitter.p.y = this.player.y*SQR_SIZE;
+
+            }
         },
         keyup: function(event) {
             var is_valid, newX, newY;
@@ -174,6 +215,14 @@ function game() {
             if (is_valid) {
                 this.player.x = newX;
                 this.player.y = newY;
+                
+                var xDiff = newX - this.goalX;
+                var yDiff = newY - this.goalY;
+                distance = Math.sqrt(xDiff*xDiff + yDiff*yDiff);
+                console.log(distance / this.maxDistance);
+
+                
+                this.music.setVolume(this.bg_sound, 1 - (distance / this.maxDistance));
             }
             var test = this.sound.play("pulse", false);
 //            this.sound.setVolume(test, 2);
