@@ -39,8 +39,36 @@ function game() {
         'top_position_x': 110,
         'top_position_y': 5,
         'bottom_position_x': 110,
-        'bottom_position_y': 215
+        'bottom_position_y': 215,
+        'start_x': 5,
+        'start_y': 5
     }
+    
+    var MED_MAP = {
+        'map': [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [2, 0, 0, 0, 0, 1, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1, 1],
+            [1, 0, 1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1]
+        ],
+        'target_x': 0,
+        'target_y': 1,
+        'left_position_x': 50,
+        'left_position_y': 40,
+        'right_position_x': 310,
+        'right_position_y': 40,
+        'top_position_x': 110,
+        'top_position_y': 5,
+        'bottom_position_x': 110,
+        'bottom_position_y': 215,
+        'start_x': 6,
+        'start_y': 2
+    }
+
+    var map_array = [EASY_MAP, MED_MAP];
 
     var SQR_SIZE = 20;
     var container = document.getElementById("game");
@@ -57,16 +85,20 @@ function game() {
         width: 700,
         container: document.getElementById("game"),
         create: function() {
-            this.map = EASY_MAP.map;
-            this.map_obj = EASY_MAP;
-            this.goalX = this.map_obj.target_x;
-            this.goalY =  this.map_obj.target_y;
-            this.maxDistance = 5.9;
+            // initialize player object with dummy x/y, will get set in
+            // reset_map
             this.player = {
                 x: 5,
                 y: 5,
                 color: "#e2543e"
             };
+            this.reset_map(0);
+//            this.map_index = 0;
+//            this.map = map_array[this.map_index].map;
+//            this.map_obj = map_array[this.map_index];
+//            this.goalX = this.map_obj.target_x;
+//            this.goalY =  this.map_obj.target_y;
+            this.maxDistance = 5.9;
             this.top_opacity = 1;
             this.left_opacity = 1;
             this.bottom_opacity = 1;
@@ -83,6 +115,15 @@ function game() {
             console.log("ready");
             this.bg_sound = this.music.play("bg", true);
             this.music.setVolume(this.bg_sound, 0.2);
+        },
+        reset_map: function(newMapIndex) {
+            this.map_index = newMapIndex;
+            this.map = map_array[this.map_index].map;
+            this.map_obj = map_array[this.map_index];
+            this.goalX = this.map_obj.target_x;
+            this.goalY =  this.map_obj.target_y;
+            this.player.x = this.map_obj.start_x;
+            this.player.y = this.map_obj.start_y;
         },
         display_walls: function() {
             y = this.player.y;
@@ -209,7 +250,13 @@ function game() {
             this.display_walls();
 
             if (this.player.x == this.map_obj.target_x && this.player.y == this.map_obj.target_y) {
-                alert("you have made it to the end!");
+                var tempIndex = this.map_index;
+                if(tempIndex+1 < map_array.length) {
+                    alert("you have made it to the end, advance to the next map!");
+                    this.reset_map(tempIndex + 1);
+                } else {
+                    alert("you have finished game! thanks for playing :)");
+                }
             }
         }
     });
