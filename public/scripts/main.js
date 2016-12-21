@@ -17,12 +17,12 @@ function game() {
     var colorMap = {
         0: "#D3D3D3",
         1: "#2F2F2F",
-        2: "#e2543e"
+        2: "#e2543e",
     }
 
     var EASY_MAP = {
         'map': [
-            [1, 1, 1, 1, 0, 1, 1, 1, 1],
+            [1, 1, 1, 1, 2, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 1, 0, 0, 1],
             [1, 0, 1, 1, 1, 1, 0, 1, 1],
             [1, 0, 1, 0, 0, 0, 0, 0, 1],
@@ -88,16 +88,16 @@ function game() {
             y = this.player.y;
             x = this.player.x;
 
-            if (x > 0 && this.map[y][x-1] != 0) {
+            if (x > 0 && this.map[y][x-1] == 1) {
                 this.left_opacity = 0;
             }
-            if (x < this.map[y].length && this.map[y][x+1] != 0) {
+            if (x < this.map[y].length && this.map[y][x+1] == 1) {
                 this.right_opacity = 0;
             }
-            if (y > 0 && this.map[y-1][x] != 0) {
+            if (y > 0 && this.map[y-1][x] == 1) {
                 this.top_opacity = 0;
             }
-            if (y < this.map[y].length && this.map[y+1][x] != 0) {
+            if (y < this.map[y].length && this.map[y+1][x] == 1) {
                 this.bottom_opacity = 0;
             }
         },
