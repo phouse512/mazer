@@ -22,7 +22,7 @@ function game() {
 
     var EASY_MAP = {
         'map': [
-            [1, 1, 1, 1, 2, 1, 1, 1, 1],
+            [1, 1, 1, 1, 0, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 1, 0, 0, 1],
             [1, 0, 1, 1, 1, 1, 0, 1, 1],
             [1, 0, 1, 0, 0, 0, 0, 0, 1],
@@ -88,20 +88,24 @@ function game() {
             y = this.player.y;
             x = this.player.x;
 
-            if (this.map[y][x-1] != 0) {
+            if (x > 0 && this.map[y][x-1] != 0) {
                 this.left_opacity = 0;
             }
-            if (this.map[y][x+1] != 0) {
+            if (x < this.map[y].length && this.map[y][x+1] != 0) {
                 this.right_opacity = 0;
             }
-            if (this.map[y-1][x] != 0) {
+            if (y > 0 && this.map[y-1][x] != 0) {
                 this.top_opacity = 0;
             }
-            if (this.map[y+1][x] != 0) {
+            if (y < this.map[y].length && this.map[y+1][x] != 0) {
                 this.bottom_opacity = 0;
             }
         },
         is_empty_location: function(to_x, to_y) {
+            if (to_x < 0 || to_y < 0) {
+                console.log('you are on the border');
+                return false;
+            }
             if (to_y >= this.map.length) {
                 console.log('no room on the y axis');
                 return false;
@@ -167,12 +171,6 @@ function game() {
             // display user
             //this.layer.fillStyle(this.player.color).fillRect(this.player.x*SQR_SIZE + MAP_HOR_OFFSET, this.player.y*SQR_SIZE + MAP_VERT_OFFSET, SQR_SIZE, SQR_SIZE);
             //
-            if (explosions) {
-                explosions.update();
-                emitter.p.x = this.player.x*SQR_SIZE;
-                emitter.p.y = this.player.y*SQR_SIZE;
-
-            }
         },
         keyup: function(event) {
             var is_valid, newX, newY;
@@ -193,7 +191,7 @@ function game() {
                 newX = this.player.x+1;
                 newY = this.player.y;
             }
-            
+
             if (is_valid) {
                 this.player.x = newX;
                 this.player.y = newY;
@@ -209,6 +207,10 @@ function game() {
             var test = this.sound.play("pulse", false);
 //            this.sound.setVolume(test, 2);
             this.display_walls();
+
+            if (this.player.x == this.map_obj.target_x && this.player.y == this.map_obj.target_y) {
+                alert("you have made it to the end!");
+            }
         }
     });
 }
