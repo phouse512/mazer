@@ -9,26 +9,7 @@ window.onload = function() {
         canvas = $("canvas")[0];
         console.log(canvas);
 
-        var proton = new Proton()
-        emitter = new Proton.Emitter();
-        emitter.rate = new Proton.Rate(Proton.getSpan(10, 20), 0.1);
-        //add Initialize
-        emitter.addInitialize(new Proton.Radius(1, 12));
-        emitter.addInitialize(new Proton.Life(2, 4));
-        emitter.addInitialize(new Proton.Velocity(3, Proton.getSpan(0, 360), 'polar'));
-        //add Behaviour
-        emitter.addBehaviour(new Proton.Color('ff0000', 'random'));
-        emitter.addBehaviour(new Proton.Alpha(1, 0));
-        //set emitter position
-        emitter.p.x = canvas.width / 2;
-        emitter.p.y = canvas.height / 2;
-        emitter.emit();
-        //add emitter to the proton
-        proton.addEmitter(emitter);
         // add canvas renderer
-        var renderer = new Proton.Renderer('canvas', proton, canvas);
-        renderer.start();
-        explosions = proton;
     }, 3000);
 }
 
@@ -77,8 +58,9 @@ function game() {
         container: document.getElementById("game"),
         create: function() {
             this.map = EASY_MAP.map;
-            this.goalX = EASY_MAP.target_x;
-            this.goalY =  EASY_MAP.target_y;
+            this.map_obj = EASY_MAP;
+            this.goalX = this.map_obj.target_x;
+            this.goalY =  this.map_obj.target_y;
             this.maxDistance = 5.9;
             this.player = {
                 x: 5,
@@ -162,25 +144,25 @@ function game() {
             if (this.top_opacity < 1) {
                this.top_opacity += .02;
                var blendedTop = cq(this.images.bar_horizontal).blend("#637074", "normal", this.top_opacity);
-               this.layer.drawImage(blendedTop.canvas, EASY_MAP.top_position_x, EASY_MAP.top_position_y);
+               this.layer.drawImage(blendedTop.canvas, this.map_obj.top_position_x, this.map_obj.top_position_y);
             }
 
             if (this.bottom_opacity < 1) {
                this.bottom_opacity += .02;
                var blendedBot = cq(this.images.bar_horizontal).blend("#637074", "normal", this.bottom_opacity);
-               this.layer.drawImage(blendedBot.canvas, EASY_MAP.bottom_position_x, EASY_MAP.bottom_position_y);
+               this.layer.drawImage(blendedBot.canvas, this.map_obj.bottom_position_x, this.map_obj.bottom_position_y);
             }
             
             if (this.left_opacity < 1) {
                this.left_opacity += .02;
                var blendedLeft = cq(this.images.bar).blend("#637074", "normal", this.left_opacity);
-               this.layer.drawImage(blendedLeft.canvas, EASY_MAP.left_position_x, EASY_MAP.left_position_y);
+               this.layer.drawImage(blendedLeft.canvas, this.map_obj.left_position_x, this.map_obj.left_position_y);
             }
 
             if (this.right_opacity < 1) {
                this.right_opacity += .02;
                var blendedRight = cq(this.images.bar).blend("#637074", "normal", this.right_opacity);
-               this.layer.drawImage(blendedRight.canvas, EASY_MAP.right_position_x, EASY_MAP.right_position_y);
+               this.layer.drawImage(blendedRight.canvas, this.map_obj.right_position_x, this.map_obj.right_position_y);
             }
             // display user
             //this.layer.fillStyle(this.player.color).fillRect(this.player.x*SQR_SIZE + MAP_HOR_OFFSET, this.player.y*SQR_SIZE + MAP_VERT_OFFSET, SQR_SIZE, SQR_SIZE);
