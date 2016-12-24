@@ -47,15 +47,15 @@ function game() {
     var MED_MAP = {
         'map': [
             [1, 1, 1, 1, 1, 1, 1, 1, 1],
-            [2, 0, 0, 0, 0, 1, 0, 0, 1],
-            [1, 0, 1, 1, 1, 1, 0, 1, 1],
+            [1, 0, 0, 1, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 0, 1, 1, 1, 1],
             [1, 0, 1, 0, 0, 0, 0, 0, 1],
-            [1, 0, 1, 1, 1, 1, 1, 0, 1],
-            [1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 1, 0, 1, 0, 1],
+            [1, 0, 0, 0, 1, 0, 1, 0, 2],
             [1, 1, 1, 1, 1, 1, 1, 1, 1]
         ],
-        'target_x': 0,
-        'target_y': 1,
+        'target_x': 8,
+        'target_y': 5,
         'left_position_x': 50,
         'left_position_y': 40,
         'right_position_x': 310,
@@ -64,11 +64,62 @@ function game() {
         'top_position_y': 5,
         'bottom_position_x': 110,
         'bottom_position_y': 215,
-        'start_x': 6,
+        'start_x': 4,
         'start_y': 2
     }
 
-    var map_array = [EASY_MAP, MED_MAP];
+    var LARGE_MAP = {
+        'map': [
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1, 1, 1],
+            [1, 0, 1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 2],
+            [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+            [1, 0, 0, 0, 1, 0, 1, 0, 1, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ],
+        'target_x': 12,
+        'target_y': 5,
+        'left_position_x': 50,
+        'left_position_y': 60,
+        'right_position_x': 385,
+        'right_position_y': 60,
+        'top_position_x': 150,
+        'top_position_y': 5,
+        'bottom_position_x': 150,
+        'bottom_position_y': 255,
+        'start_x': 3,
+        'start_y': 1
+    }
+    
+    var LARGER_MAP = {
+        'map': [
+            [1, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+            [1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1, 0, 1],
+            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
+            [1, 0, 1, 0, 1, 0, 1, 1, 1, 0, 1, 0, 1],
+            [1, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
+            [1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+            [1, 0, 0, 0, 1, 0, 1, 0, 0, 0, 1, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        ],
+        'target_x': 1,
+        'target_y': 0,
+        'left_position_x': 50,
+        'left_position_y': 60,
+        'right_position_x': 385,
+        'right_position_y': 60,
+        'top_position_x': 150,
+        'top_position_y': 5,
+        'bottom_position_x': 150,
+        'bottom_position_y': 255,
+        'start_x': 7,
+        'start_y': 5
+    }
+    var map_array = [EASY_MAP, MED_MAP, LARGE_MAP, LARGER_MAP];
 
     var SQR_SIZE = 20;
     var container = document.getElementById("game");
@@ -255,7 +306,7 @@ function game() {
                     alert("you have made it to the end, advance to the next map!");
                     this.reset_map(tempIndex + 1);
                 } else {
-                    alert("you have finished game! thanks for playing :)");
+                    alert("you have finished the game! thanks for playing Esther :)");
                 }
             }
         }
