@@ -19,3 +19,8 @@ While this method is not the best and requires global state, I think this is
 ok. The current approach already makes heavy use of global state, and because
 its a relatively simple application it hasn't come back to bite me. We'll see
 before it finishes, but I think this is the best approach for now.
+
+#### deploying
+
+If you are deploying this, `public/scripts/playground.js` needs to be copied to
+the server since it is not checked into git.
